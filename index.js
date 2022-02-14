@@ -33,6 +33,7 @@ app.get('/:game/:nTop', async (req, res) => {
 app.put('/:game/:playerNick/:score', async (req, res) => {
     const fs = admin.firestore();
     const collection = fs.collection(req.params.game);
+    const data = req.body.data;
 
     if (collection === undefined) {
         return res.status(400).send("This game does not exist.");
@@ -40,7 +41,8 @@ app.put('/:game/:playerNick/:score', async (req, res) => {
         const newScoreRef = collection.doc();
         const dbRes = await newScoreRef.set({
             playerNick: req.params.playerNick,
-            score: Number.parseInt(req.params.score)
+            score: Number.parseInt(req.params.score),
+            data: data || null,
         })
         return res.status(201).send("Ok");
     }
